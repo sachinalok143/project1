@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^delete-book-from-cart/(?P<id>\d+)','mainApp.moreViews.deleteBookFromCart',name='delete-book-from-cart'), 
     
     url(r'^place-order/(?P<flag>\d+)','mainApp.moreViews.placeOrder',name='place-order'), 
-
+    url(r'^add-publisher/', 'mainApp.views.addPublisher', name='add-publisher'),
     url(r'^admin/', include(admin.site.urls)),
 ]
 

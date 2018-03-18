@@ -26,7 +26,7 @@ class Author(models.Model):
 		return self.Name
 
 class Publisher(models.Model):
-	Name=models.CharField(max_length=120,blank=True,null=True)
+	Name=models.CharField(max_length=120,null=True)
 	Publication=models.CharField(max_length=120,blank=True,null=True)
 	Address=models.TextField(max_length=500,blank=True,null=True)
 	email=models.EmailField()
@@ -37,7 +37,7 @@ class Publisher(models.Model):
 		return self.Name
 
 class Book(models.Model):
-	Title=models.CharField(max_length=120,blank=True,null=True)
+	Title=models.CharField(max_length=120,blank=False,null=True)
 	Publisher=models.ForeignKey(Publisher)
 	Updated_at=models.DateTimeField(auto_now_add=False,auto_now=True)
 	Created_at=models.DateTimeField(auto_now_add=True,auto_now=False)

@@ -9,6 +9,7 @@ from django.contrib.auth import (
 	logout,
 	)
 
+from django.http import HttpResponseRedirect
 
 Category_set=Category.objects.all().order_by("Name")
 # for Category in Category_set:
@@ -180,7 +181,13 @@ def sellerLoginView(request):
 	if request.user.is_authenticated():	
 		seller=Seller.objects.get(User_id=request.user.id)
 		
-		return render(request,"Authentication/sellerProfile.html",{"categories":Category_set,"seller":seller})
+		# # title2="Add a Book"
+		form2=BookForm(request.POST or None)
+		if form2.is_valid():
+			form2.save()
+			return HttpResponseRedirect('')
+		return render(request,"Authentication/sellerProfile.html",{"categories":Category_set,"seller":seller,
+			"form2":form2})
 	return render(request,"Authentication/customerLogin.html",{"form":form,"categories":Category_set})
 
 
@@ -326,3 +333,13 @@ def getSingleBook(request,id=None):
 		reviewList.append(reviewDetail( aReview,customer,user))
 	
 	return render(request,"singleView.html",{"bookDetail":bookDetail,"categories":Category_set,"form":form,"reviewList":reviewList})
+
+def addPublisher(request):
+	form=PublisherForm(request.POST or None )
+	seller=Seller.objects.get(User_id=request.user.id)
+
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect("../seller-login")
+	return render(request,"Authentication/addPublisher.html",{"categories":Category_set,"seller":seller,
+			"form":form})
