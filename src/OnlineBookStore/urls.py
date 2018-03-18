@@ -27,7 +27,9 @@ urlpatterns = [
     url(r'^dec-quantity-in-cart/(?P<id>\d+)','mainApp.moreViews.decQuantityInCart',name='dec-quantity-in-cart'), 
     url(r'^inc-quantity-in-cart/(?P<id>\d+)','mainApp.moreViews.incQuantityInCart',name='inc-quantity-in-cart'), 
     url(r'^delete-book-from-cart/(?P<id>\d+)','mainApp.moreViews.deleteBookFromCart',name='delete-book-from-cart'), 
-   
+    
+    url(r'^place-order/(?P<flag>\d+)','mainApp.moreViews.placeOrder',name='place-order'), 
+
     url(r'^admin/', include(admin.site.urls)),
 ]
 

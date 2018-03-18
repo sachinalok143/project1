@@ -81,8 +81,37 @@ def customerLoginView(request):
 			return render(request,"Authentication/customerLogin.html",{"form":form,"error":error,"categories":Category_set})
 		else :
 			login(request,user)
-		if request.user.is_authenticated():		
-			return render(request,"Authentication/customerLogin.html",{"form":form,"title":title,"categories":Category_set})
+	if request.user.is_authenticated():		
+		class orderObjectDetail(object):
+			def __init__(self, orderObject=None, bookEdition=None):
+				self.orderObject = orderObject
+				self.bookEdition = bookEdition
+		orderObjectList=[]
+		totalPrice=0
+		user=Customer.objects.get(user_id=request.user.id)
+		customer=Customer.objects.get(user_id=request.user.id)
+		orderObjects=Order.objects.filter(Customer_id=customer).order_by('-Created_at')[:5]
+		for orderObject in orderObjects:
+			bookEdition=BookEdition.objects.get(id=orderObject.Book_id)
+			orderObjectList.append(orderObjectDetail(orderObject,bookEdition))
+			# print (ordertObjectList.count)
+			totalPrice+=(orderObject.Quantity*bookEdition.Price)
+		totalPrice+=150
+
+			# return render(request,"orderView.html",{"totalPrice":totalPrice,
+			 # "Customer":customer,"orderObjectList":orderObjectList, "categories":Category_set})
+		context={
+		"totalPrice":totalPrice,
+		 "Customer":customer,
+		 "orderObjectList":orderObjectList,
+		 "user":user,
+		 # "form":form,
+		 # "title":title,
+		 "categories":Category_set,
+		}
+		# return render(request,"cartView.html",{"totalPrice":totalPrice,
+		#  "Customer":customer,"cartObjectList":cartObjectList, "categories":Category_set})
+		return render(request,"Authentication/customerProfileView.html",context)
 	return render(request,"Authentication/customerLogin.html",{"form":form,"categories":Category_set})
 
 def customerRegisterView(request):
@@ -104,11 +133,31 @@ def customerRegisterView(request):
 		# userprofile.User=username
 		userprofile.user_id=request.user.id
 		t=userprofile.save()
-		# print(t)
+	if request.user.is_authenticated():		
+		class orderObjectDetail(object):
+			def __init__(self, orderObject=None, bookEdition=None):
+				self.orderObject = orderObject
+				self.bookEdition = bookEdition
+		orderObjectList=[]
+		totalPrice=0
+		user=Customer.objects.get(user_id=request.user.id)
+		customer=Customer.objects.get(user_id=request.user.id)
+		orderObjects=Order.objects.filter(Customer_id=customer).order_by('-Created_at')[:5]
+		for orderObject in orderObjects:
+			bookEdition=BookEdition.objects.get(id=orderObject.Book_id)
+			orderObjectList.append(orderObjectDetail(orderObject,bookEdition))
+			# print (ordertObjectList.count)
+			totalPrice+=(orderObject.Quantity*bookEdition.Price)
+		totalPrice+=150
+		context={
+		"totalPrice":totalPrice,
+		 "Customer":customer,
+		 "orderObjectList":orderObjectList,
+		 "user":user,
+		 "categories":Category_set,
+		}
 		
-		# new_userProfile.save()
-	# if request.user.is_authenticated():
-	# 	logedInUserProfile=Customer.objects.get(user_id=request.user.id)
+		return render(request,"Authentication/customerProfileView.html",context)
 	return render(request,"Authentication/customerRegister.html",{"form1":form1,"form2":form2,"title":title,"categories":Category_set})
 	
 
@@ -131,12 +180,7 @@ def sellerLoginView(request):
 	if request.user.is_authenticated():	
 		seller=Seller.objects.get(User_id=request.user.id)
 		
-		# # title2="Add a Book"
-		# form2=BookForm(request.POST or None)
-		# if form2.is_valid():
-		# 	title='Book is added successfully'
-		# 	form2.save()
-		return render(request,"sellerProfile.html",{"categories":Category_set,"seller":seller})
+		return render(request,"Authentication/sellerProfile.html",{"categories":Category_set,"seller":seller})
 	return render(request,"Authentication/customerLogin.html",{"form":form,"categories":Category_set})
 
 

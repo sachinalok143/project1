@@ -152,9 +152,10 @@ class Notification(models.Model):
 
 class Order(models.Model):
 	DateOfPurchase=models.DateTimeField(auto_now_add=True,auto_now=False)
-	DateOfShipment=models.DateTimeField(blank=True)
-	DateOfDelivary=models.DateTimeField(blank=True)
+	DateOfShipment=models.DateTimeField(blank=True,null=True)
+	DateOfDelivary=models.DateTimeField(blank=True,null=True)
 	Tag=models.CharField(max_length=500,blank=True,null=True)
+	Quantity=models.IntegerField(default=0,blank=True,null=True)
 	Book=models.ForeignKey(BookEdition)
 	Customer=models.ForeignKey(Customer)
 	Updated_at=models.DateTimeField(auto_now_add=False,auto_now=True)

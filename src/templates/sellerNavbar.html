@@ -16,7 +16,7 @@
       {%else%}
        <div class="agile-login">
         <ul>
-          <li><a href="{% url 'customer-login' %}"> {{request.user.first_name}} {{request.user.last_name}} </a></li>
+          <li><a href=""> {{request.user.first_name}} {{request.user.last_name}} </a></li>
           
           <li><a href="{%url 'auth_logout'%}">Log out</a></li>
           <li><a href="">Help</a></li>
@@ -77,7 +77,7 @@
                   <li class="active"><a href="{%url 'home'%}" class="act">Home</a></li> 
                   <!-- Mega Menu -->
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Books<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories<b class="caret"></b></a>
                     <ul class="dropdown-menu multi-column columns-3">
                       <div class="row">
                         <div class="multi-gd-img">
@@ -99,9 +99,13 @@
                         <div class="row">
                           <div class="multi-gd-img">
                             <ul class="multi-column-dropdown">
-                           <li><a href="{%url 'seller-register'%}">Register as Seller</a></li>
+                            {%if request.user.is_authenticated%}
+                              <li><a href="{%url 'auth_logout'%}">Log out</a></li>
+                             
+                             {%else%}
+                              <li><a href="{%url 'seller-register'%}">Register as Seller</a></li>
                               <li><a href="{%url 'seller-login'%}">Login as Seller</a></li>
-                              
+                              {%endif%}
                             </ul>
                           </div>
                           
@@ -114,18 +118,39 @@
                         <div class="row">
                           <div class="multi-gd-img">
                             <ul class="multi-column-dropdown">
+                              {%if request.user.is_authenticated%}
+                              <li><a href="{%url 'auth_logout'%}">Log out</a></li>
                              
+                             {%else%}
                               <li><a href="{%url 'admin-register'%}">Register as Admin</a></li>
                               <li><a href="{%url 'admin-login'%}">Login as Admin</a></li>
-                            
+                              {%endif%}
                             </ul>
                           </div>
                           
                         </div>
                       </ul>
                     </li>
-                     
-                    <!--
+                          <!--
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Personal Care<b class="caret"></b></a>
+                      <ul class="dropdown-menu multi-column columns-3">
+                        <div class="row">
+                          <div class="multi-gd-img">
+                            <ul class="multi-column-dropdown">
+                              <h6>Baby Care</h6>
+                              <li><a href="personalcare.html">Baby Soap</a></li>
+                              <li><a href="personalcare.html">Baby Care Accessories</a></li>
+                              <li><a href="personalcare.html">Baby Oil & Shampoos</a></li>
+                              <li><a href="personalcare.html">Baby Creams & Lotion</a></li>
+                              <li><a href="personalcare.html"> Baby Powder</a></li>
+                              <li><a href="personalcare.html">Diapers & Wipes</a></li>
+                            </ul>
+                          </div>
+                          
+                        </div>
+                      </ul>
+                    </li>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Packaged Foods<b class="caret"></b></a>
                       <ul class="dropdown-menu multi-column columns-3">
@@ -166,32 +191,8 @@
                       </ul>
                     </li> -->
                   <!-- <li><a href="#">Gourmet</a></li> -->
-                  <!-- <li><a href="#">Offers</a></li> -->
-                  <li><a href="#footer_section">Contact</a></li>
-                  </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown float-right" style="float: right;">
-                    {%if request.user.is_authenticated%}
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<b class="caret"></b></a>
-                      <ul class="dropdown-menu multi-column columns-3">
-                        <div class="row">
-                          <div class="multi-gd-img">
-                            <ul class="multi-column-dropdown">
-                              <h6><a href="{% url 'customer-login' %}"> {{request.user.first_name}} {{request.user.last_name}} </a></h6>
-                              <li><a href="{% url 'customer-login' %}">Your Profile</a></li>
-                              <li><a href="{% url 'cart-view'%}">Your Cart</a></li>
-                              <li><a href="{% url 'place-order' flag=0%}">Orders</a></li>
-                              <li><a href="{%url 'auth_logout'%}">Log out</a></li>
-                             
-                            </ul>
-                          </div>
-                          
-                        </div>
-                      </ul>
-                      {%else%}
-                         <li><a href="{% url 'customer-login' %}">Log in</a></li>
-                      {%endif%}
-                    </li>
+                  <li><a href="#">Offers</a></li>
+                  <li><a href="#">Contact</a></li>
                 </ul>
               </div>
               </nav>

@@ -75,7 +75,7 @@ class NotificationAdmin(admin.ModelAdmin):
 		model = Notification
 
 class OrderAdmin(admin.ModelAdmin):
-	list_display=["id","DateOfPurchase","DateOfShipment","DateOfDelivary","Tag","Book","Customer",	"Updated_at","Created_at"]
+	list_display=["id","DateOfPurchase","Quantity","DateOfShipment","DateOfDelivary","Tag","Book","Customer",	"Updated_at","Created_at"]
 	# form=AdminForm
 	class Meta:
 		model = Order

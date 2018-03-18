@@ -39,6 +39,8 @@ def postReview(request):
 		reviewList.append(reviewDetail( aReview,customer,user))
 	return render(request,"commentView.html",{"categories":Category_set,"reviewList":reviewList})
 
+
+
 def deleteReview(request,id=None,Book_id=None):
 	review=Review.objects.get(id=id)
 	review.delete()
@@ -56,6 +58,7 @@ def deleteReview(request,id=None,Book_id=None):
 		user=User.objects.get(id=customer.user_id)
 		reviewList.append(reviewDetail( aReview,customer,user))
 	return render(request,"commentView.html",{"categories":Category_set,"reviewList":reviewList})
+
 
 def addToCart(request,Book_id=None):
 	# check=1
@@ -76,9 +79,11 @@ def addToCart(request,Book_id=None):
 		cartObject.save()
 		check=0
 	return render(request,"Notifications/dummy.html" ,{"check":check,"Quantity":Quantity})
+
+
 def cartView(request):
 	customer=Customer.objects.get(user_id=request.user.id)
-	cartObjects=Cart.objects.filter(Customer_id=customer)
+	cartObjects=Cart.objects.filter(Customer_id=customer.id)
 	class cartObjectDetail(object):
 		def __init__(self, cartObject=None, bookEdition=None):
 			self.cartObject = cartObject
@@ -90,9 +95,14 @@ def cartView(request):
 		cartObjectList.append(cartObjectDetail(cartObject,bookEdition))
 		# print (cartObjectList.count)
 		totalPrice+=(cartObject.Quantity*bookEdition.Price)
-
+	totalPrice+=150
 	return render(request,"cartView.html",{"totalPrice":totalPrice,
 	 "Customer":customer,"cartObjectList":cartObjectList, "categories":Category_set})
+
+
+
+
+
 def decQuantityInCart(request,id=None):
 	c=Cart.objects.filter(id=id)
 	if not c[0].Quantity==1:
@@ -101,10 +111,15 @@ def decQuantityInCart(request,id=None):
 		return render(request,"Notifications/cartdec.html" ,{"dec":2,"Quantity":c[0].Quantity})
 	return render(request,"Notifications/cartdec.html" ,{"dec":1,"Quantity":c[0].Quantity})
 
+
+
+
 def incQuantityInCart(request,id=None):
 	c=Cart.objects.filter(id=id)
 	c.update(Quantity=c[0].Quantity+1)
 	return render(request,"Notifications/cartdec.html" ,{"dec":0,"Quantity":c[0].Quantity})
+
+
 def deleteBookFromCart(request,id=None):
 	book=Cart.objects.get(id=id)
 	book.delete()
@@ -120,5 +135,41 @@ def deleteBookFromCart(request,id=None):
 		bookEdition=BookEdition.objects.get(id=cartObject.Book_id)
 		cartObjectList.append(cartObjectDetail(cartObject,bookEdition))
 		totalPrice+=(cartObject.Quantity*bookEdition.Price)
+	totalPrice+=150
 	return render(request,"cartIndividualView.html",{"totalPrice":totalPrice,
 	 "Customer":customer,"cartObjectList":cartObjectList})
+# def orederViewDetail(request):
+
+
+
+
+def placeOrder(request,flag=None):
+	customer=Customer.objects.get(user_id=request.user.id)
+	cartObjects=Cart.objects.filter(Customer_id=customer)
+	
+	class orderObjectDetail(object):
+		def __init__(self, orderObject=None, bookEdition=None):
+			self.orderObject = orderObject
+			self.bookEdition = bookEdition
+	orderObjectList=[]
+	totalPrice=0
+	# print (flag)
+	# print (request.user.id)
+	if int(flag)==int(request.user.id):
+		for cartObject in cartObjects:
+			Ordr=Order()
+			Ordr.Quantity=cartObject.Quantity
+			Ordr.Book_id=cartObject.Book_id
+			Ordr.Customer_id=cartObject.Customer_id
+			Ordr.save()
+			cartObject.delete()
+	orderObjects=Order.objects.filter(Customer_id=customer)
+	for orderObject in orderObjects:
+		bookEdition=BookEdition.objects.get(id=orderObject.Book_id)
+		orderObjectList.append(orderObjectDetail(orderObject,bookEdition))
+		# print (ordertObjectList.count)
+		totalPrice+=(orderObject.Quantity*bookEdition.Price)
+	totalPrice+=150
+
+	return render(request,"orderView.html",{"totalPrice":totalPrice,
+	 "Customer":customer,"orderObjectList":orderObjectList, "categories":Category_set})
